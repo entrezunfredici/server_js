@@ -1,15 +1,28 @@
 const express = require("express");
 const app = express();
 const PORT = 3000;
-const booksRoutes = require("./api/books/routes");
+const createBookRouter = require("./api/books/routes");
+const rateLimit = require("express-rate-limit");
 
 // Middleware pour lire le JSON dans les requetes
 app.use(express.json());
 
-// Routes
-app.use("/api/books", booksRoutes);
+const limiterOptions = {
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: "Trop de requetes, reessayez plus tard." },
+};
 
-app.use(({ res }) => {
+const limiters = {
+  ONE_SEC: rateLimit({ ...limiterOptions, max: 2, windowMs: 1000 }),
+  FIVE_SEC: rateLimit({ ...limiterOptions, max: 2, windowMs: 7000 }),
+};
+
+// Routes
+app.use("/api/books", createBookRouter(limiters));
+
+// Correction ici : utiliser (req, res) au lieu de ({ res })
+app.use((req, res) => {
   return res.status(404).json({ message: "Route not found" });
 });
 

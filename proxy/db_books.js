@@ -1,4 +1,4 @@
-const books = require("../mockDB/bookDB");
+const books = require("../mock/bookDB");
 
 const nextId = () => {
   if (books.length === 0) {

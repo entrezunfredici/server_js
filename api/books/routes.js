@@ -1,16 +1,25 @@
 const express = require("express");
-const add_book = require("./add_book");
-const get_books = require("./get_books");
-const get_book = require("./get_book");
-const put_book = require("./put_book");
-const del_book = require("./del_book");
+const addBook = require("./add_book");
+const getBooks = require("./get_books");
+const getBook = require("./get_book");
+const updateBook = require("./put_book");
+const deleteBook = require("./del_book");
 
-const router = express.Router();
+const passthrough = (req, res, next) => next();
 
-router.get("/", get_books.getAll);
-router.get("/:id", get_book.get);
-router.post("/", add_book.post);
-router.put("/:id", put_book.put);
-router.delete("/:id", del_book.delete);
+const createBooksRouter = (limiters = {}) => {
+    const router = express.Router();
 
-module.exports = router;
+    const readLimiter = limiters.FIVE_SEC || passthrough;
+    const writeLimiter = limiters.ONE_SEC || readLimiter;
+
+    router.get("/", readLimiter, getBooks.getAll);
+    router.get("/:id", readLimiter, getBook.get);
+    router.post("/", writeLimiter, addBook.post);
+    router.put("/:id", writeLimiter, updateBook.put);
+    router.delete("/:id", writeLimiter, deleteBook.delete);
+
+    return router;
+};
+
+module.exports = createBooksRouter;

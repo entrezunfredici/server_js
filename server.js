@@ -1,12 +1,18 @@
-const express = require('express');
-
+const express = require("express");
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = 3000;
+const booksRoutes = require("./api/books/routes");
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+// Middleware pour lire le JSON dans les requetes
+app.use(express.json());
+
+// Routes
+app.use("/api/books", booksRoutes);
+
+app.use(({ res }) => {
+  return res.status(404).json({ message: "Route not found" });
 });
 
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Serveur lance sur http://localhost:${PORT}`);
 });

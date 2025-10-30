@@ -1,3 +1,4 @@
+const cors = require('cors');
 require('dotenv').config();
 const express = require("express");
 const app = express();
@@ -6,12 +7,18 @@ const rateLimit = require("express-rate-limit");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./docs/swagger");
 
+const corsOptions = {
+  origin: process.env.AUTHORIZED_URL || 'https://frontend.example.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 204, // pour le preflight
+};
+
 // routes
 const createBookRouter = require("./api/books/routes");
 const createAuthRouter = require("./api/auth/routes");
 
-// Middleware pour lire le JSON dans les requetes
-app.use(express.json());
+app.use(cors(corsOptions));
 
 const limiterOptions = {
   standardHeaders: true,

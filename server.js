@@ -2,11 +2,13 @@ require('dotenv').config();
 const express = require("express");
 const app = express();
 const PORT = 3000;
-const createBookRouter = require("./api/books/routes");
-const createAuthRouter = require("./api/auth/routes")
 const rateLimit = require("express-rate-limit");
-const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./docs/swagger");
+
+// routes
+const createBookRouter = require("./api/books/routes");
+const createAuthRouter = require("./api/auth/routes");
 
 // Middleware pour lire le JSON dans les requetes
 app.use(express.json());
@@ -22,11 +24,12 @@ const limiters = {
   FIVE_SEC: rateLimit({ ...limiterOptions, max: 2, windowMs: 7000 }),
 };
 
+
 // Middleware pour servir la documentation Swagger
-//app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Routes
-app.use("/books", createBookRouter(limiters));
+createBookRouter(app);
 createAuthRouter(app);
 
 // Correction ici : utiliser (req, res) au lieu de ({ res })
@@ -37,3 +40,5 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`Serveur lance sur http://localhost:${PORT}`);
 });
+
+module.exports = app;

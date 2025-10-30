@@ -1,73 +1,70 @@
 const express = require("express");
 const login = require("./login");
 const register = require("./register");
+const router = express.Router();
 
-const createAuthRouter = (limiters = {}) => {
-    const router = express.Router();
-    /**
-     * @swagger
-     * /auth/login:
-     *   post:
-     *     summary: login and get JWT
-     *     tags: [auth]
-     *     requestBody:
-     *       required: true
-     *       content:
-     *         application/json:
-     *           schema:
-     *             type: object
-     *             properties:
-     *               name:
-     *                 type: string
-     *                 example: "Michel"
-     *               password:
-     *                 type: string
-     *                 example: "fougères123"
-     *     responses:
-     *       200:
-     *         description: JWT généré.
-     *         content:
-     *           application/json:
-     *             schema:
-     *               type: object
-     *               properties:
-     *                 token:
-     *                   type: string
-     *       404:
-     *         description: login failed.
-     *       500:
-     *         description: Server Error.
-     */
-    router.post("/login", login.login);
-    /**
-     * @swagger
-     * /auth/register:
-     *   post:
-     *     summary: register
-     *     tags: [auth]
-     *     requestBody:
-     *       required: true
-     *       content:
-     *         application/json:
-     *           schema:
-     *             type: object
-     *             properties:
-     *               name:
-     *                 type: string
-     *                 example: "mathieu"
-     *               password:
-     *                 type: string
-     *                 example: "mypassword123"
-     *     responses:
-     *       201:
-     *         description: register success.
-     *       500:
-     *         description: register failed.
-     */
-    router.post("/register", register.register);
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: login and get JWT
+ *     tags: [auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Michel"
+ *               password:
+ *                 type: string
+ *                 example: "fougeres123"
+ *     responses:
+ *       200:
+ *         description: JWT generated.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       404:
+ *         description: login failed.
+ *       500:
+ *         description: Server Error.
+ */
+router.post("/login", login.login);
 
-    return router;
-};
+/**
+ * @swagger
+ * /auth/register:
+ *   post:
+ *     summary: register
+ *     tags: [auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "mathieu"
+ *               password:
+ *                 type: string
+ *                 example: "mypassword123"
+ *     responses:
+ *       201:
+ *         description: register success.
+ *       500:
+ *         description: register failed.
+ */
+router.post("/register", register.register);
 
 module.exports = (app) => {
     /**
@@ -76,5 +73,5 @@ module.exports = (app) => {
      *   - name: auth
      *     description: authentification
      */
-    app.use("/auth", createAuthRouter);
+    app.use("/auth", router);
 };

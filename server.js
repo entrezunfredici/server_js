@@ -29,7 +29,7 @@ const limiters = {
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Routes
-createBookRouter(app);
+app.use("/books", createBookRouter(limiters));
 createAuthRouter(app);
 
 // Correction ici : utiliser (req, res) au lieu de ({ res })

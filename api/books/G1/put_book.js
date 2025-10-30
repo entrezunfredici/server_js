@@ -1,4 +1,4 @@
-const db_books = require('../../proxy/db_books');
+const db_books = require('../../../proxy/db_books');
 
 exports.put = async (req, res) => {
   const id = parseInt(req.params.id, 10);

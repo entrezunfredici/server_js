@@ -1,4 +1,4 @@
-const db_books = require('../../proxy/db_books');
+const db_books = require('../../../proxy/db_books');
 
 exports.post = async (req, res) => {
   const { title, author } = req.body;

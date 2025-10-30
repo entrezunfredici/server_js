@@ -1,4 +1,4 @@
-const db_books = require('../../proxy/db_books');
+const db_books = require('../../../proxy/db_books');
 
 exports.getAll = async (req, res) => {
   const books = await db_books.getAll();

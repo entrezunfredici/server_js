@@ -5,37 +5,71 @@ const router = express.Router();
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     AuthCredentials:
+ *       type: object
+ *       required:
+ *         - name
+ *         - password
+ *       properties:
+ *         name:
+ *           type: string
+ *           example: "Michel"
+ *         password:
+ *           type: string
+ *           example: "fougeres123"
+ *     AuthTokenResponse:
+ *       type: object
+ *       properties:
+ *         token:
+ *           type: string
+ *           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *     RegisterResponse:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           example: "User registered with success."
+ *     ErrorResponse:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           example: "Login failed"
+ */
+
+/**
+ * @swagger
  * /auth/login:
  *   post:
- *     summary: login and get JWT
+ *     summary: Login and get a JWT
  *     tags: [auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 example: "Michel"
- *               password:
- *                 type: string
- *                 example: "fougeres123"
+ *             $ref: '#/components/schemas/AuthCredentials'
  *     responses:
  *       200:
- *         description: JWT generated.
+ *         description: Authentication succeeded.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 token:
- *                   type: string
+ *               $ref: '#/components/schemas/AuthTokenResponse'
  *       404:
- *         description: login failed.
+ *         description: Invalid credentials.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: Server Error.
+ *         description: Server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post("/login", login.login);
 
@@ -43,26 +77,27 @@ router.post("/login", login.login);
  * @swagger
  * /auth/register:
  *   post:
- *     summary: register
+ *     summary: Register a user
  *     tags: [auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 example: "mathieu"
- *               password:
- *                 type: string
- *                 example: "mypassword123"
+ *             $ref: '#/components/schemas/AuthCredentials'
  *     responses:
  *       201:
- *         description: register success.
+ *         description: Registration succeeded.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RegisterResponse'
  *       500:
- *         description: register failed.
+ *         description: Registration failed.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post("/register", register.register);
 
@@ -71,7 +106,7 @@ module.exports = (app) => {
      * @swagger
      * tags:
      *   - name: auth
-     *     description: authentification
+     *     description: Authentication endpoints
      */
     app.use("/auth", router);
 };

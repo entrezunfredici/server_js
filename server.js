@@ -1,7 +1,9 @@
+require('dotenv').config();
 const express = require("express");
 const app = express();
 const PORT = 3000;
 const createBookRouter = require("./api/books/routes");
+const createUserRouter = require("./api/auth/routes")
 const rateLimit = require("express-rate-limit");
 
 // Middleware pour lire le JSON dans les requetes
@@ -19,7 +21,8 @@ const limiters = {
 };
 
 // Routes
-app.use("/api/books", createBookRouter(limiters));
+app.use("/books", createBookRouter(limiters));
+app.use("/users", createUserRouter());
 
 // Correction ici : utiliser (req, res) au lieu de ({ res })
 app.use((req, res) => {

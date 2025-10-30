@@ -4,6 +4,7 @@ const getBooks = require("./get_books");
 const getBook = require("./get_book");
 const updateBook = require("./put_book");
 const deleteBook = require("./del_book");
+const requireAuth = require("../auth/auth.middleware");
 
 const passthrough = (req, res, next) => next();
 
@@ -15,9 +16,9 @@ const createBooksRouter = (limiters = {}) => {
 
     router.get("/", readLimiter, getBooks.getAll);
     router.get("/:id", readLimiter, getBook.get);
-    router.post("/", writeLimiter, addBook.post);
-    router.put("/:id", writeLimiter, updateBook.put);
-    router.delete("/:id", writeLimiter, deleteBook.delete);
+    router.post("/", writeLimiter, requireAuth, addBook.post);
+    router.put("/:id", writeLimiter, requireAuth, updateBook.put);
+    router.delete("/:id", writeLimiter, requireAuth, deleteBook.delete);
 
     return router;
 };

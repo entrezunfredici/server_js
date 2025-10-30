@@ -15,9 +15,12 @@
     "bcryptjs": "^3.0.2",
     "express": "^5.1.0",
     "express-rate-limit": "^8.1.0",
+    "jsdoc": "^4.0.5",
     "jsonwebtoken": "^9.0.2",
     "ratelimit": "^0.0.4",
     "sequelize": "^6.37.7",
-    "swagger": "^0.0.1"
+    "swagger": "^0.0.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   }
 }

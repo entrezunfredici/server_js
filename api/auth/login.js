@@ -19,6 +19,6 @@ exports.login = async (req, res) => {
         res.status(200).send({ token });
     } catch (error) {
         console.error(error?.message || error);
-        res.status(500).send({ message: "Login failed." });
+        res.status(500).send({ message: "Server Error." });
     }
 };

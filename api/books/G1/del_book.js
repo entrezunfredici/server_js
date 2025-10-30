@@ -1,4 +1,5 @@
 const db_books = require('../../../proxy/db_books');
+const { formatBook, buildCollectionLinks } = require("./hateoas");
 
 exports.delete = async (req, res) => {
   const id = parseInt(req.params.id, 10);
@@ -13,5 +14,9 @@ exports.delete = async (req, res) => {
     return res.status(404).json({ message: "Livre non trouve" });
   }
 
-  res.json({ message: "Livre supprime", deleted: book });
+  res.json({
+    message: "Livre supprime",
+    deleted: formatBook(book),
+    _links: buildCollectionLinks(),
+  });
 };

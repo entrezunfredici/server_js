@@ -1,4 +1,5 @@
 const db_books = require('../../../proxy/db_books');
+const { formatBook } = require("./hateoas");
 
 exports.post = async (req, res) => {
   const { title, author } = req.body;
@@ -8,5 +9,5 @@ exports.post = async (req, res) => {
   }
 
   const newBook = await db_books.add({ title, author });
-  res.status(201).json(newBook);
+  res.status(201).json(formatBook(newBook));
 };

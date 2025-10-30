@@ -65,16 +65,57 @@ module.exports = (limiters = {}) => {
      *                 versions:
      *                   type: array
      *                   items:
-     *                     type: string
-     *                   example: ["G1"]
+     *                     type: object
+     *                     properties:
+     *                       id:
+     *                         type: string
+     *                         example: "G1"
+     *                       _links:
+     *                         type: object
+     *                         properties:
+     *                           self:
+     *                             type: object
+     *                             properties:
+     *                               href:
+     *                                 type: string
+     *                                 example: "/books/G1"
      *                 latest:
      *                   type: string
      *                   example: "G1"
+     *                 _links:
+     *                   type: object
+     *                   properties:
+     *                     self:
+     *                       type: object
+     *                       properties:
+     *                         href:
+     *                           type: string
+     *                           example: "/books"
+     *                     latest:
+     *                       type: object
+     *                       properties:
+     *                         href:
+     *                           type: string
+     *                           example: "/books/G1"
      */
     router.get("/", (req, res) => {
+        const latestVersion =
+            mountedVersions.length > 0 ? mountedVersions[mountedVersions.length - 1] : null;
+
         res.json({
-            versions: mountedVersions,
-            latest: mountedVersions.length > 0 ? mountedVersions[mountedVersions.length - 1] : null,
+            versions: mountedVersions.map((version) => ({
+                id: version,
+                _links: {
+                    self: { href: `/books/${version}` },
+                },
+            })),
+            latest: latestVersion,
+            _links: {
+                self: { href: "/books" },
+                ...(latestVersion
+                    ? { latest: { href: `/books/${latestVersion}` } }
+                    : {}),
+            },
         });
     });
 

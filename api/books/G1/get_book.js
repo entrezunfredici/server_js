@@ -1,4 +1,5 @@
 const db_books = require('../../../proxy/db_books');
+const { formatBook } = require("./hateoas");
 
 exports.get = async (req, res) => {
   const id = parseInt(req.params.id, 10);
@@ -13,5 +14,5 @@ exports.get = async (req, res) => {
     return res.status(404).json({ message: "Livre non trouve" });
   }
 
-  res.json(book);
+  res.json(formatBook(book));
 };

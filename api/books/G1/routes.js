@@ -22,20 +22,49 @@ module.exports = (limiters = {}) => {
 
     /**
      * @swagger
-     * components:
-     *   schemas:
-     *     Book:
-     *       type: object
-     *       properties:
-     *         id:
-     *           type: integer
-     *           example: 1
-     *         title:
-     *           type: string
-     *           example: "Le Petit Prince"
-     *         author:
-     *           type: string
-     *           example: "Antoine de Saint-Exupery"
+ * components:
+ *   schemas:
+ *     Book:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         title:
+ *           type: string
+ *           example: "Le Petit Prince"
+ *         author:
+ *           type: string
+ *           example: "Antoine de Saint-Exupery"
+ *     Link:
+ *       type: object
+ *       properties:
+ *         href:
+ *           type: string
+ *           example: "/books/G1/1"
+ *         method:
+ *           type: string
+ *           example: "GET"
+ *     BookResource:
+ *       allOf:
+ *         - $ref: '#/components/schemas/Book'
+ *         - type: object
+ *           properties:
+ *             _links:
+ *               type: object
+ *               additionalProperties:
+ *                 $ref: '#/components/schemas/Link'
+ *     BookCollection:
+ *       type: object
+ *       properties:
+ *         items:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/BookResource'
+ *         _links:
+ *           type: object
+ *           additionalProperties:
+ *             $ref: '#/components/schemas/Link'
      */
 
     /**
@@ -50,9 +79,7 @@ module.exports = (limiters = {}) => {
      *         content:
      *           application/json:
      *             schema:
-     *               type: array
-     *               items:
-     *                 $ref: '#/components/schemas/Book'
+     *               $ref: '#/components/schemas/BookCollection'
      *       500:
      *         description: Server error.
      */
@@ -77,7 +104,7 @@ module.exports = (limiters = {}) => {
      *         content:
      *           application/json:
      *             schema:
-     *               $ref: '#/components/schemas/Book'
+     *               $ref: '#/components/schemas/BookResource'
      *       400:
      *         description: Invalid identifier.
      *       404:
@@ -117,7 +144,7 @@ module.exports = (limiters = {}) => {
      *         content:
      *           application/json:
      *             schema:
-     *               $ref: '#/components/schemas/Book'
+     *               $ref: '#/components/schemas/BookResource'
      *       400:
      *         description: Missing fields.
      *       401:
@@ -164,7 +191,7 @@ module.exports = (limiters = {}) => {
      *         content:
      *           application/json:
      *             schema:
-     *               $ref: '#/components/schemas/Book'
+     *               $ref: '#/components/schemas/BookResource'
      *       400:
      *         description: Invalid payload or identifier.
      *       401:
@@ -203,7 +230,11 @@ module.exports = (limiters = {}) => {
      *                   type: string
      *                   example: "Livre supprime"
      *                 deleted:
-     *                   $ref: '#/components/schemas/Book'
+     *                   $ref: '#/components/schemas/BookResource'
+     *                 _links:
+     *                   type: object
+     *                   additionalProperties:
+     *                     $ref: '#/components/schemas/Link'
      *       400:
      *         description: Invalid identifier.
      *       401:

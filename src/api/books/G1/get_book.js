@@ -1,5 +1,6 @@
 const db_books = require('../../../proxy/db_books');
 const { formatBook } = require("./hateoas");
+const is_type = require('../../../utils/verifier');
 
 exports.get = async (req, res) => {
   const id = parseInt(req.params.id, 10);

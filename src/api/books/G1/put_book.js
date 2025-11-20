@@ -1,9 +1,14 @@
 const db_books = require('../../../proxy/db_books');
 const { formatBook } = require("./hateoas");
+const is_type = require('../../../utils/verifier');
 
 exports.put = async (req, res) => {
   const id = parseInt(req.params.id, 10);
   const { title, author } = req.body;
+
+  if (!is_type(title, "string") || !is_type(author, "string")) {
+    return res.status(400).json({ message: "Title and author invalid types." });
+  }
 
   if (Number.isNaN(id)) {
     return res.status(400).json({ message: "Identifiant invalide" });
